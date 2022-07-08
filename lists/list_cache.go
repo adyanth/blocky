@@ -110,13 +110,9 @@ func NewListCache(t ListCacheType, groupToLinks map[string][]string, refreshPeri
 		listType:              t,
 		processingConcurrency: processingConcurrency,
 	}
-	initError := b.refresh(true)
-
-	if initError == nil {
-		go periodicUpdate(b)
-	}
-
-	return b, initError
+	go b.refresh(true)
+	go periodicUpdate(b)
+	return b, nil
 }
 
 // periodicUpdate triggers periodical refresh (and download) of list entries
